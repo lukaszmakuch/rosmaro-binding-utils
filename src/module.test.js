@@ -2,8 +2,10 @@ import {
   extendArrows, 
   extractParent,
   mergeContexts,
-  mergeArrows
+  mergeArrows,
+  initialContextLens
 } from '.';
+import {view, set} from 'ramda';
 import dcopy from 'deep-copy';
 
 describe('Rosmaro binding utils', () => {
@@ -231,5 +233,44 @@ describe('Rosmaro binding utils', () => {
     });
 
   });
+
+  describe('lenses', () => {
+    const testLens = ({
+      lens, 
+      zoomInInput, 
+      zoomInOutput,
+      zoomOutInput,
+      zoomOutOutput,
+    }) => {
+      expect(zoomInOutput).toEqual(view(lens, zoomInInput));
+      expect(zoomOutOutput).toEqual(set(lens, zoomOutInput, zoomInInput));
+    };
+
+    describe('initial context lens', () => {
+
+      it('alters the context if it is undefined', () => {
+        testLens({
+          lens: initialContextLens({a: 123}),
+          zoomInInput: undefined, 
+          zoomInOutput: {a: 123},
+          zoomOutInput: {a: 123},
+          zoomOutOutput: {a: 123},
+        })
+      });
+
+      it('does not alter empty objects', () => {
+        testLens({
+          lens: initialContextLens({a: 123}),
+          zoomInInput: {}, 
+          zoomInOutput: {},
+          zoomOutInput: {},
+          zoomOutOutput: {},
+        })
+      });
+
+    });
+    
+  });
+
 
 });

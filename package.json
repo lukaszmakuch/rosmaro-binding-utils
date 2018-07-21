@@ -23,7 +23,5 @@
     "jest": "^23.4.1",
     "ramda": "^0.25.0"
   },
-  "devDependencies": {
-    "webpack-cli": "^2.0.13"
-  }
+  "devDependencies": {}
 }
