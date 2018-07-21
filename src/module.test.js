@@ -3,7 +3,8 @@ import {
   extractParent,
   mergeContexts,
   mergeArrows,
-  initialContextLens
+  initialValueLens,
+  sliceLens
 } from '.';
 import {view, set} from 'ramda';
 import dcopy from 'deep-copy';
@@ -246,11 +247,25 @@ describe('Rosmaro binding utils', () => {
       expect(zoomOutOutput).toEqual(set(lens, zoomOutInput, zoomInInput));
     };
 
+    describe('context slicing lens', () => {
+
+      it('allows to work with just part of an object', () => {
+        testLens({
+          lens: sliceLens('b'),
+          zoomInInput: {a: 123, b: {c: 456}}, 
+          zoomInOutput: {c: 456},
+          zoomOutInput: {c: 987},
+          zoomOutOutput: {a: 123, b: {c: 987}}, 
+        })
+      });
+
+    });
+
     describe('initial context lens', () => {
 
       it('alters the context if it is undefined', () => {
         testLens({
-          lens: initialContextLens({a: 123}),
+          lens: initialValueLens({a: 123}),
           zoomInInput: undefined, 
           zoomInOutput: {a: 123},
           zoomOutInput: {a: 123},
@@ -260,7 +275,7 @@ describe('Rosmaro binding utils', () => {
 
       it('does not alter empty objects', () => {
         testLens({
-          lens: initialContextLens({a: 123}),
+          lens: initialValueLens({a: 123}),
           zoomInInput: {}, 
           zoomInOutput: {},
           zoomOutInput: {},

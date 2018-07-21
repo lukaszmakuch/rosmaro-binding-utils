@@ -44,8 +44,14 @@ export const mergeContexts = (original, newOnes) => {
 // Merging arrows:
 export const mergeArrows = arrows => reduce(concat, [], arrows);
 
-// The initial context lens:
-export const initialContextLens = initCtx => lens(
+// The initial value lens:
+export const initialValueLens = initCtx => lens(
   (inObj) => (inObj === undefined) ? initCtx : inObj,
   (outObj, inObj) => outObj
+);
+
+// Context slicing lens:
+export const sliceLens = slice => lens(
+  (inObj) => inObj[slice],
+  (outObj, inObj) => ({...inObj, [slice]: outObj})
 );
