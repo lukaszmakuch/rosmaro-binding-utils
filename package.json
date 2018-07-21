@@ -18,7 +18,10 @@
     "babel-plugin-syntax-object-rest-spread": "^6.13.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.4.0",
-    "jest": "^23.4.1"
+    "deep-copy": "^1.4.2",
+    "deep-diff": "^1.0.1",
+    "jest": "^23.4.1",
+    "ramda": "^0.25.0"
   },
   "devDependencies": {
     "webpack-cli": "^2.0.13"
