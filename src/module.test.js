@@ -259,6 +259,16 @@ describe('Rosmaro binding utils', () => {
         })
       });
 
+      it('returns undefined if the desired property does not exist', () => {
+        testLens({
+          lens: sliceLens('b'),
+          zoomInInput: {a: 123}, 
+          zoomInOutput: undefined,
+          zoomOutInput: {c: 987},
+          zoomOutOutput: {a: 123, b: {c: 987}}, 
+        })
+      });
+
     });
 
     describe('initial context lens', () => {
