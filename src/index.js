@@ -1,5 +1,5 @@
 import dcopy from 'deep-copy';
-import {reduce, concat, lens} from 'ramda';
+import {reduce, concat, lens, identity} from 'ramda';
 import deep from 'deep-diff';
 const diff = deep.diff
 const applyChange = deep.applyChange
@@ -43,6 +43,9 @@ export const mergeContexts = (original, newOnes) => {
 
 // Merging arrows:
 export const mergeArrows = arrows => reduce(concat, [], arrows);
+
+// The transparent lens:
+export const transparentLens = lens(identity, identity);
 
 // The initial value lens:
 export const initialValueLens = initCtx => lens(

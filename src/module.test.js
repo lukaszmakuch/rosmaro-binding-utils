@@ -4,7 +4,8 @@ import {
   mergeContexts,
   mergeArrows,
   initialValueLens,
-  sliceLens
+  sliceLens,
+  transparentLens
 } from '.';
 import {view, set} from 'ramda';
 import dcopy from 'deep-copy';
@@ -269,6 +270,20 @@ describe('Rosmaro binding utils', () => {
         })
       });
 
+    });
+
+    describe('transparent lens', () => {
+
+      it('does nothing to the context', () => {
+        testLens({
+          lens: transparentLens,
+          zoomInInput: {a: 123, b: {c: 987}}, 
+          zoomInOutput: {a: 123, b: {c: 987}},
+          zoomOutInput: {a: 123, b: {c: 987}},
+          zoomOutOutput: {a: 123, b: {c: 987}},
+        })
+      });
+      
     });
 
     describe('initial context lens', () => {
