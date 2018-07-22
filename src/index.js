@@ -1,6 +1,6 @@
 import dcopy from 'deep-copy';
-import {reduce, concat, lens, identity, map, 
-  prop, values, cond, equals, lte, always, head} from 'ramda';
+import {reduce, concat, lens, identity, map, tail, complement, both,
+  prop, values, cond, equals, lte, always, head, has, is, anyPass} from 'ramda';
 import deep from 'deep-diff';
 const diff = deep.diff
 const applyChange = deep.applyChange
@@ -97,5 +97,25 @@ const callCompositeChildren = ({children, action, context: originalContext}) => 
 export const typeHandler = ({defaultHandler}) => handlerByType => (opts) => 
   (handlerByType[opts.action.type] || defaultHandler)(opts);
 
-// The default handler.
+// The default handler:
 export const defaultHandler = (opts) => callChildren(opts);
+
+// Partial returns:
+export const partialReturns = handler => opts => {
+  const returned = handler(opts);
+  console.log({returned, opts})
+  const arrows = returned.arrows || (returned.arrow ? [[[opts.node.id, returned.arrow]]] : []);
+  const context = returned.context || opts.context;
+  const effect = (returned.result || {}).effect || returned.effect;
+  const hasNone = props => both(is(Object), complement(anyPass(map(has, props))))
+  const data = 
+    (returned.result || {}).data 
+    || returned.result 
+    || (hasNone(['arrows', 'arrow', 'result', 'context', 'effect'])(returned) ? returned : undefined);
+
+  return {
+    arrows,
+    result: {effect, data},
+    context
+  }
+};
