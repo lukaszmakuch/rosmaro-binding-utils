@@ -7,7 +7,8 @@ import {
   sliceLens,
   transparentLens,
   callChildren,
-  typeHandler
+  typeHandler,
+  defaultHandler
 } from '.';
 import {view, set} from 'ramda';
 import dcopy from 'deep-copy';
@@ -261,26 +262,29 @@ describe('Rosmaro binding utils', () => {
 
   describe('calling children', () => {
 
+    // The default handler equals the callChildren function.
+    const withFns = (test) => ([callChildren, defaultHandler]).forEach(fn => test(fn));
+
     describe('leaf', () => {
 
-      it('has no children', () => {
+      it('has no children', () => withFns(fn => {
         const action = {type: 'DO_YOUR_JOB'};
         const context = {a: 1, b: 2};
         const children = {};
         expect(
-          callChildren({context, action, children})
+          fn({context, action, children})
         ).toEqual({
           context: {a: 1, b: 2},
           result: undefined,
           arrows: []
         });
-      });
+      }));
 
     });
 
     describe('single child node', () => {
 
-      it('just extends the arrow', () => {
+      it('just extends the arrow', () => withFns(fn => {
         const action = {type: 'DO_YOUR_JOB'};
         const context = {a: 1, b: 2};
         const children = {
@@ -299,7 +303,7 @@ describe('Rosmaro binding utils', () => {
             [['main:A', 'x'], ['main', 'x']],
           ]
         });
-      });
+      }));
     
     });
 
@@ -319,7 +323,7 @@ describe('Rosmaro binding utils', () => {
         })
       };
 
-      it('merges composites', () => {
+      it('merges composites', () => withFns(fn => {
         expect(
           callChildren({context, action, children})
         ).toEqual({
@@ -330,7 +334,7 @@ describe('Rosmaro binding utils', () => {
             [['main:B', 'y'], ['main', 'y']],
           ]
         });
-      });
+      }));
 
     });
 

@@ -96,3 +96,6 @@ const callCompositeChildren = ({children, action, context: originalContext}) => 
 // Associating handlers with action types:
 export const typeHandler = ({defaultHandler}) => handlerByType => (opts) => 
   (handlerByType[opts.action.type] || defaultHandler)(opts);
+
+// The default handler.
+export const defaultHandler = (opts) => callChildren(opts);
