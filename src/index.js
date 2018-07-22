@@ -1,5 +1,6 @@
 import dcopy from 'deep-copy';
-import {reduce, concat, lens, identity, map, prop, values, cond, equals, lte, always, head} from 'ramda';
+import {reduce, concat, lens, identity, map, 
+  prop, values, cond, equals, lte, always, head} from 'ramda';
 import deep from 'deep-diff';
 const diff = deep.diff
 const applyChange = deep.applyChange
@@ -92,3 +93,6 @@ const callCompositeChildren = ({children, action, context: originalContext}) => 
   return {result, arrows, context: newContext};
 };
 
+// Associating handlers with action types:
+export const typeHandler = ({defaultHandler}) => handlerByType => (opts) => 
+  (handlerByType[opts.action.type] || defaultHandler)(opts);
