@@ -239,6 +239,23 @@ describe('Rosmaro binding utils', () => {
 
   describe('calling children', () => {
 
+    describe('leaf', () => {
+
+      it('has no children', () => {
+        const action = {type: 'DO_YOUR_JOB'};
+        const context = {a: 1, b: 2};
+        const children = {};
+        expect(
+          callChildren({context, action, children})
+        ).toEqual({
+          context: {a: 1, b: 2},
+          result: undefined,
+          arrows: []
+        });
+      });
+
+    });
+
     describe('single child node', () => {
 
       it('just extends the arrow', () => {

@@ -63,10 +63,17 @@ export const sliceLens = slice => lens(
 export const callChildren = (opts) => {
   const numOfChildren = values(opts.children).length;
   return cond([
+    [equals(0), always(callNoChild)],
     [equals(1), always(callSingleChild)],
     [lte(2), always(callCompositeChildren)],
   ])(numOfChildren)(opts);
 };
+
+const callNoChild = ({context}) => ({
+  context,
+  result: undefined,
+  arrows: [],
+});
 
 const callSingleChild = ({children, action}) => {
   const childResult = head(values(children))({action});
