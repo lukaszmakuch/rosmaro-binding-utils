@@ -1,5 +1,5 @@
 import dcopy from 'deep-copy';
-import {reduce, concat, lens, identity, map, prop, values} from 'ramda';
+import {reduce, concat, lens, identity, map, prop, values, cond, equals, lte, always, head} from 'ramda';
 import deep from 'deep-diff';
 const diff = deep.diff
 const applyChange = deep.applyChange
@@ -60,7 +60,23 @@ export const sliceLens = slice => lens(
 );
 
 // Calling children:
-export const callChildren = ({children, action, context: originalContext}) => {
+export const callChildren = (opts) => {
+  const numOfChildren = values(opts.children).length;
+  return cond([
+    [equals(1), always(callSingleChild)],
+    [lte(2), always(callCompositeChildren)],
+  ])(numOfChildren)(opts);
+};
+
+const callSingleChild = ({children, action}) => {
+  const childResult = head(values(children))({action});
+  return {
+    ...childResult,
+    arrows: extendArrows(childResult.arrows)
+  };
+};
+
+const callCompositeChildren = ({children, action, context: originalContext}) => {
   const childrenResults = map(child => child({action}), children);
   const col = name => map(prop(name), childrenResults);
   const result = col('result');
@@ -68,3 +84,4 @@ export const callChildren = ({children, action, context: originalContext}) => {
   const newContext = mergeContexts(originalContext, values(col('context')));
   return {result, arrows, context: newContext};
 };
+

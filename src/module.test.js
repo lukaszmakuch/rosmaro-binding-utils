@@ -239,6 +239,31 @@ describe('Rosmaro binding utils', () => {
 
   describe('calling children', () => {
 
+    describe('single child node', () => {
+
+      it('just extends the arrow', () => {
+        const action = {type: 'DO_YOUR_JOB'};
+        const context = {a: 1, b: 2};
+        const children = {
+          A: ({action}) => ({
+            arrows: [[['main:A', 'x']]],
+            result: 'AResult',
+            context: {a: 2, b: 4},
+          })
+        };
+        expect(
+          callChildren({context, action, children})
+        ).toEqual({
+          context: {a: 2, b: 4},
+          result: 'AResult',
+          arrows: [
+            [['main:A', 'x'], ['main', 'x']],
+          ]
+        });
+      });
+    
+    });
+
     describe('composite children', () => {
       const action = {type: 'DO_YOUR_JOB'};
       const context = {a: 1, b: 2};
@@ -265,8 +290,9 @@ describe('Rosmaro binding utils', () => {
             [['main:A', 'x'], ['main', 'x']],
             [['main:B', 'y'], ['main', 'y']],
           ]
-        })
+        });
       });
+
     });
 
   });
