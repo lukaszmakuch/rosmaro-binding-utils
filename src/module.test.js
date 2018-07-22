@@ -5,7 +5,8 @@ import {
   mergeArrows,
   initialValueLens,
   sliceLens,
-  transparentLens
+  transparentLens,
+  callChildren
 } from '.';
 import {view, set} from 'ramda';
 import dcopy from 'deep-copy';
@@ -236,6 +237,40 @@ describe('Rosmaro binding utils', () => {
 
   });
 
+  describe('calling children', () => {
+
+    describe('composite children', () => {
+      const action = {type: 'DO_YOUR_JOB'};
+      const context = {a: 1, b: 2};
+      const children = {
+        A: ({action}) => ({
+          arrows: [[['main:A', 'x']]],
+          result: 'AResult',
+          context: {a: 2, b: 2},
+        }),
+        B: ({action}) => ({
+          arrows: [[['main:B', 'y']]],
+          result: 'BResult',
+          context: {a: 1, b: 4},
+        })
+      };
+
+      it('merges composites', () => {
+        expect(
+          callChildren({context, action, children})
+        ).toEqual({
+          context: {a: 2, b: 4},
+          result: {A: 'AResult', B: 'BResult'},
+          arrows: [
+            [['main:A', 'x'], ['main', 'x']],
+            [['main:B', 'y'], ['main', 'y']],
+          ]
+        })
+      });
+    });
+
+  });
+
   describe('lenses', () => {
     const testLens = ({
       lens, 
@@ -283,7 +318,7 @@ describe('Rosmaro binding utils', () => {
           zoomOutOutput: {a: 123, b: {c: 987}},
         })
       });
-      
+
     });
 
     describe('initial context lens', () => {

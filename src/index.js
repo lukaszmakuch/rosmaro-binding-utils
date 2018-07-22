@@ -1,5 +1,5 @@
 import dcopy from 'deep-copy';
-import {reduce, concat, lens, identity} from 'ramda';
+import {reduce, concat, lens, identity, map, prop, values} from 'ramda';
 import deep from 'deep-diff';
 const diff = deep.diff
 const applyChange = deep.applyChange
@@ -58,3 +58,13 @@ export const sliceLens = slice => lens(
   (inObj) => inObj[slice],
   (outObj, inObj) => ({...inObj, [slice]: outObj})
 );
+
+// Calling children:
+export const callChildren = ({children, action, context: originalContext}) => {
+  const childrenResults = map(child => child({action}), children);
+  const col = name => map(prop(name), childrenResults);
+  const result = col('result');
+  const arrows = extendArrows(mergeArrows(values(col('arrows'))));
+  const newContext = mergeContexts(originalContext, values(col('context')));
+  return {result, arrows, context: newContext};
+};
