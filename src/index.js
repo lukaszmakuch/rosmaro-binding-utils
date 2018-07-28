@@ -103,13 +103,14 @@ export const defaultHandler = (opts) => callChildren(opts);
 // Partial returns:
 export const partialReturns = handler => opts => {
   const returned = handler(opts);
-  const arrows = returned.arrows || (returned.arrow ? [[[opts.node.id, returned.arrow]]] : []);
-  const context = returned.context || opts.context;
-  const effect = (returned.result || {}).effect || returned.effect;
+  const nonEmptyReturned = handler(opts) || {};
+  const arrows = nonEmptyReturned.arrows || (nonEmptyReturned.arrow ? [[[opts.node.id, nonEmptyReturned.arrow]]] : []);
+  const context = nonEmptyReturned.context || opts.context;
+  const effect = (nonEmptyReturned.result || {}).effect || nonEmptyReturned.effect;
   const hasNone = props => either(complement(is(Object)), complement(anyPass(map(has, props))))
   const data = 
-    (returned.result || {}).data 
-    || returned.result 
+    (nonEmptyReturned.result || {}).data 
+    || nonEmptyReturned.result 
     || (hasNone(['arrows', 'arrow', 'result', 'context', 'effect'])(returned) ? returned : undefined);
   return {
     arrows,
