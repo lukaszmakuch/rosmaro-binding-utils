@@ -103,7 +103,6 @@ export const defaultHandler = (opts) => callChildren(opts);
 // Partial returns:
 export const partialReturns = handler => opts => {
   const returned = handler(opts);
-  console.log({returned, opts})
   const arrows = returned.arrows || (returned.arrow ? [[[opts.node.id, returned.arrow]]] : []);
   const context = returned.context || opts.context;
   const effect = (returned.result || {}).effect || returned.effect;
