@@ -1,5 +1,5 @@
 import dcopy from 'deep-copy';
-import {reduce, concat, lens, identity, map, tail, complement, both,
+import {reduce, concat, lens, identity, map, tail, complement, either,
   prop, values, cond, equals, lte, always, head, has, is, anyPass} from 'ramda';
 import deep from 'deep-diff';
 const diff = deep.diff
@@ -106,12 +106,11 @@ export const partialReturns = handler => opts => {
   const arrows = returned.arrows || (returned.arrow ? [[[opts.node.id, returned.arrow]]] : []);
   const context = returned.context || opts.context;
   const effect = (returned.result || {}).effect || returned.effect;
-  const hasNone = props => both(is(Object), complement(anyPass(map(has, props))))
+  const hasNone = props => either(complement(is(Object)), complement(anyPass(map(has, props))))
   const data = 
     (returned.result || {}).data 
     || returned.result 
     || (hasNone(['arrows', 'arrow', 'result', 'context', 'effect'])(returned) ? returned : undefined);
-
   return {
     arrows,
     result: {effect, data},

@@ -263,7 +263,22 @@ describe('Rosmaro binding utils', () => {
 
   describe('partial returns', () => {
 
-    it('allows to return just some result', () => {
+    it('allows to return just some string', () => {
+      expect(
+        partialReturns(opts => "string result")({})
+      ).toEqual(
+        ({
+          result: {
+            data: "string result",
+            effect: undefined,
+          },
+          arrows: [],
+          context: undefined
+        })
+      )
+    });
+
+    it('allows to return just some result object', () => {
       expect(
         partialReturns(opts => ({resultOf: opts}))({context: {a: 123}})
       ).toEqual(
