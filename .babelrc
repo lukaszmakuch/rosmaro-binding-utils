@@ -1,4 +1,14 @@
 {
   "presets": ["env"],
-  "plugins": ["syntax-object-rest-spread", "transform-object-rest-spread"]
+  "plugins": ["syntax-object-rest-spread", "transform-object-rest-spread"],
+  "env": {
+    "test": {
+    },
+    "production": {
+      "ignore": [
+        "**/testUtils.js",
+        "**/*test.js",
+      ]
+    }
+  },
 }

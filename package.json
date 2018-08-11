@@ -5,23 +5,29 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "npx jest --watch",
-    "build": "rm -rf dist && babel src -d dist",
-    "prepublishOnly": "npm run build"
+    "build": "rm -rf dist && NODE_ENV=production babel src -d dist",
+    "prepublishOnly": "npm run build",
+    "readme": "cat src/README.md > README.md && find src/*/ -type f -name README.md | xargs cat >> README.md"
   },
   "keywords": [
-    "rosmaro"
+    "rosmaro",
+    "automata-based programming"
   ],
   "author": "Łukasz Makuch <kontakt@lukaszmakuch.pl> (https://lukaszmakuch.pl)",
   "license": "MIT",
   "dependencies": {
+    "deep-copy": "^1.4.2",
+    "deep-diff": "^1.0.1",
+    "ramda": "^0.25.0"
+  },
+  "devDependencies": {
+    "jest": "^23.4.1",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.4.2",
+    "regenerator-runtime": "^0.12.1",
     "babel-cli": "^6.24.1",
     "babel-plugin-syntax-object-rest-spread": "^6.13.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
-    "babel-preset-env": "^1.4.0",
-    "deep-copy": "^1.4.2",
-    "deep-diff": "^1.0.1",
-    "jest": "^23.4.1",
-    "ramda": "^0.25.0"
-  },
-  "devDependencies": {}
+    "babel-preset-env": "^1.4.0"
+  }
 }
