@@ -1,4 +1,4 @@
-import {supportTargetedActions} from './../';
+import {targetedActions} from './../';
 
 describe('targeted actions', () => {
 
@@ -9,7 +9,7 @@ describe('targeted actions', () => {
       'it can produce': toNode({type: 'A PRIVATE ACTION', payload: ':)'})
     });
 
-    const handler = supportTargetedActions()(baseHandler);
+    const handler = targetedActions()(baseHandler);
 
     it('calls a node when it is targeted by the action', () => {
       expect(

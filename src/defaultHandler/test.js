@@ -1,6 +1,6 @@
-import {callChildren} from './../';
+import {defaultHandler} from './../';
 
-describe('calling children', () => {
+describe('default handler', () => {
 
     describe('leaf', () => {
 
@@ -9,10 +9,10 @@ describe('calling children', () => {
         const context = {a: 1, b: 2};
         const children = {};
         expect(
-          callChildren({context, action, children})
+          defaultHandler({context, action, children})
         ).toEqual({
           context: {a: 1, b: 2},
-          result: {},
+          result: undefined,
           arrows: []
         });
       });
@@ -32,10 +32,10 @@ describe('calling children', () => {
           })
         };
         expect(
-          callChildren({context, action, children})
+          defaultHandler({context, action, children})
         ).toEqual({
           context: {a: 2, b: 4},
-          result: {A: 'AResult'},
+          result: 'AResult',
           arrows: [
             [['main:A', 'x'], ['main', 'x']],
           ]
@@ -62,7 +62,7 @@ describe('calling children', () => {
 
       it('merges composites', () => {
         expect(
-          callChildren({context, action, children})
+          defaultHandler({context, action, children})
         ).toEqual({
           context: {a: 2, b: 4},
           result: {A: 'AResult', B: 'BResult'},

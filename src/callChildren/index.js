@@ -1,5 +1,5 @@
 import {mergeContexts, extendArrows, mergeArrows} from './../';
-import {values, cond, equals, always, lte, head, map, prop, col} from 'ramda';
+import {values, cond, equals, always, keys, lte, head, map, prop, col} from 'ramda';
 
 export const callChildren = (opts) => {
   const numOfChildren = values(opts.children).length;
@@ -12,15 +12,17 @@ export const callChildren = (opts) => {
 
 const callNoChild = ({context}) => ({
   context,
-  result: undefined,
+  result: {},
   arrows: [],
 });
 
 const callSingleChild = ({children, action}) => {
   const childResult = head(values(children))({action});
+  const childName = head(keys(children));
   return {
     ...childResult,
-    arrows: extendArrows(childResult.arrows)
+    result: {[childName]: childResult.result},
+    arrows: extendArrows(childResult.arrows),
   };
 };
 

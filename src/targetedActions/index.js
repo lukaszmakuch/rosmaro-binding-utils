@@ -4,7 +4,7 @@ const isTarget = ({action: {target}, node: {id}}) => !target || target.startsWit
 
 const emptyResult = ({context}) => ({context, arrows: [], result: undefined});
 
-export const supportTargetedActions = () => handler => (opts) => {
+export const targetedActions = () => handler => (opts) => {
   return isTarget(opts)
     ? handler({...opts, toNode: makeToNode(opts.node.id)})
     : emptyResult(opts)
