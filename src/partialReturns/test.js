@@ -17,6 +17,21 @@ describe('partial returns', () => {
     )
   });
 
+  it('allows to return an empty string', () => {
+    expect(
+      partialReturns(opts => ({result: {data: '', effect: undefined}}))({})
+    ).toEqual(
+      ({
+        result: {
+          data: '',
+          effect: undefined,
+        },
+        arrows: [],
+        context: undefined
+      })
+    )
+  });
+
   it('allows to return just some string', () => {
     expect(
       partialReturns(opts => "string result")({})
