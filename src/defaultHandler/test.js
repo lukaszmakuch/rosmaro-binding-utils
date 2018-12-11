@@ -50,12 +50,18 @@ describe('default handler', () => {
       const children = {
         A: ({action}) => ({
           arrows: [[['main:A', 'x']]],
-          result: 'AResult',
+          result: {
+            effect: [{type: 'A_EFFECT_1'}, {type: 'A_EFFECT_2'}],
+            data: 'AResult'
+          },
           context: {a: 2, b: 2},
         }),
         B: ({action}) => ({
           arrows: [[['main:B', 'y']]],
-          result: 'BResult',
+          result: {
+            effect: {type: 'B_EFFECT_1'},
+            data: 'BResult'
+          },
           context: {a: 1, b: 4},
         })
       };
@@ -65,7 +71,14 @@ describe('default handler', () => {
           defaultHandler({context, action, children})
         ).toEqual({
           context: {a: 2, b: 4},
-          result: {A: 'AResult', B: 'BResult'},
+          result: {
+            data: {A: 'AResult', B: 'BResult'},
+            effect: [
+              {type: 'A_EFFECT_1'},
+              {type: 'A_EFFECT_2'},
+              {type: 'B_EFFECT_1'}
+            ]
+          },
           arrows: [
             [['main:A', 'x'], ['main', 'x']],
             [['main:B', 'y'], ['main', 'y']],

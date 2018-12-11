@@ -1,4 +1,5 @@
 import {callChildren} from './../';
+import {isNil, is} from 'ramda';
 
 export const defaultHandler = (opts) => {
   const childrenResult = callChildren(opts);
@@ -14,6 +15,30 @@ export const defaultHandler = (opts) => {
       result: Object.values(childrenResult.result)[0]
     };
   } else {
-    return childrenResult;
+    return {
+      context: childrenResult.context,
+      arrows: childrenResult.arrows,
+      result: Object.keys(childrenResult.result).reduce(
+        (soFar, child) => {
+          const data = childrenResult.result[child].data;
+          const maybeEffect = childrenResult.result[child].effect;
+          const effectArray =
+            isNil(maybeEffect) ? []
+            : is(Array)(maybeEffect) ? maybeEffect
+            : [maybeEffect];
+          return {
+            data: {
+              ...soFar.data,
+              [child]: data,
+            },
+            effect: [
+              ...soFar.effect,
+              ...effectArray
+            ]
+          };
+        },
+        {data: {}, effect: []}
+      )
+    };
   }
 }

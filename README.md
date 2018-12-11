@@ -2,6 +2,14 @@
 
 A set of utilities for writing [Rosmaro](https://rosmaro.js.org) handlers.
 
+## Snippet
+
+```javascript
+import {typeHandler, defaultHandler, partialReturns, targetedActions, callChildren} from 'rosmaro-binding-utils';
+
+const makeHandler = handlerPlan => targetedActions()(partialReturns(typeHandler({defaultHandler})(handlerPlan)));
+```
+
 ## callChildren
 
 Allows to call all the children at once.
@@ -76,10 +84,22 @@ expect(
 ```
 ## defaultHandler
 
-Acts like `callChildren` except for nodes which have just one child. Then the result is in the form of `ChildResult` instead of `{Child: ChildResult}`.
-
 ```javascript
 import 'defaultHandler' from 'rosmaro-binding-utils';
+```
+
+If a node has just one child, this handler is simply transparent.
+
+If a node has many children, let's say `A` and `B`, then the result looks like this:
+```javascript
+{
+  data: {A: 'AResult', B: 'BResult'},
+  effect: [
+    {type: 'A_EFFECT_1'},
+    {type: 'A_EFFECT_2'},
+    {type: 'B_EFFECT_1'}
+  ]
+}
 ```
 ## extendArrows
 
