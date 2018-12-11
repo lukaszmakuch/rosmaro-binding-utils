@@ -1,6 +1,6 @@
 {
   "name": "rosmaro-binding-utils",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Makes writing simple rosmaro bindings easier.",
   "main": "dist/index.js",
   "scripts": {

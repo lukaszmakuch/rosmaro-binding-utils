@@ -67,7 +67,7 @@ describe('targeted actions', () => {
       ).toEqual({
         context: {everything: 42},
         arrows: [],
-        result: undefined
+        result: {data: undefined, effect: []}
       });
     });
 
