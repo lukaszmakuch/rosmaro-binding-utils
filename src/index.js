@@ -10,3 +10,4 @@ export {typeHandler} from './typeHandler';
 export {defaultHandler} from './defaultHandler';
 export {partialReturns} from './partialReturns';
 export {targetedActions} from './targetedActions';
+export {triggerEntryActions, supportEntryActions} from './entryActions';

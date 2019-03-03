@@ -5,11 +5,22 @@ A set of utilities for writing [Rosmaro](https://rosmaro.js.org) handlers.
 ## Snippet
 
 ```javascript
-import {typeHandler, defaultHandler, partialReturns, targetedActions, callChildren} from 'rosmaro-binding-utils';
+import {
+  typeHandler,
+  defaultHandler,
+  partialReturns,
+  targetedActions,
+  callChildren,
+  supportEntryActions,
+  triggerEntryActions
+} from 'rosmaro-binding-utils';
 
-const makeHandler = handlerPlan => targetedActions()(partialReturns(typeHandler({defaultHandler})(handlerPlan)));
+const makeHandler = handlerPlan => supportEntryActions(targetedActions()(partialReturns(typeHandler({defaultHandler})(handlerPlan))));
+
+// ...
+
+const model = triggerEntryActions(rosmaro({graph, bindings}));
 ```
-
 ## callChildren
 
 Allows to call all the children at once.
@@ -101,6 +112,40 @@ If a node has many children, let's say `A` and `B`, then the result looks like t
   ]
 }
 ```
+## supportEntryActions and triggerEntryActions
+
+Enable entry actions for Rosmaro nodes.
+
+### Installation
+
+```javascript
+import {supportEntryActions, triggerEntryActions} from 'rosmaro-binding-utils';
+```
+
+Wrap the handler with `supportEntryActions`:
+```javascript
+const myHandler = opts => { /* ... */ };
+const aHandlerThatSupportsEntryActions = supportEntryActions(myHandler);
+```
+
+Wrap the model with `triggerEntryActions`:
+```javascript
+const myModel = rosmaro({bindings, graph});
+const aModelThatTriggersEntryActions = triggerEntryActions(myModel);
+```
+
+### Usage
+
+Follow arrows and return effects from the `ON_ENTRY` handler:
+```javascript
+{
+  ON_ENTRY: ({context}) => ({
+    arrow: 'started',
+    effect: {type: 'START_AN_AWESOME_PROJECT'},
+  })
+}
+```
+
 ## extendArrows
 
 "Extends" the given arrows in such a away that the parent nodes also follow them.

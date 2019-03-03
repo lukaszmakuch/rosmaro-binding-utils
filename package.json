@@ -1,6 +1,6 @@
 {
   "name": "rosmaro-binding-utils",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Makes writing simple rosmaro bindings easier.",
   "main": "dist/index.js",
   "scripts": {
@@ -21,13 +21,10 @@
     "ramda": "^0.25.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-jest": "^23.4.2",
-    "babel-plugin-syntax-object-rest-spread": "^6.13.0",
-    "babel-plugin-transform-object-rest-spread": "^6.23.0",
-    "babel-preset-env": "^1.4.0",
-    "jest": "^24.1.0",
-    "regenerator-runtime": "^0.12.1"
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-transform-spread": "^7.2.2",
+    "@babel/preset-env": "^7.3.4",
+    "jest": "^24.1.0"
   }
 }
