@@ -34,28 +34,27 @@ const triggerUnlessNoMoreEntryActions = ({
 }) => {
   const runAttempt = model({state: callRes.state, action: onEntryAction});
   const effect = runAttempt.result.effect;
-  const noReaction = !effect && resultIsEmpty(runAttempt.result);
-  if (noReaction) {
-    if (firstAttempt) {
-      return callRes;
-    } else {
-      return {
-        ...runAttempt, 
-        result: {
-          effect: sanitizeEffects([...prevEffects, effect]),
-          data: resultData,
-        }
-      };
-    }
+  const anyArrowFollowed = !resultIsEmpty(runAttempt.result.data);
+
+  if (anyArrowFollowed) {
+    return triggerUnlessNoMoreEntryActions({
+      model, 
+      callRes: runAttempt, 
+      resultData,
+      prevEffects: [...prevEffects, effect], 
+      firstAttempt: false
+    });
   }
 
-  return triggerUnlessNoMoreEntryActions({
-    model, 
-    callRes: runAttempt, 
-    resultData,
-    prevEffects: [...prevEffects, effect], 
-    firstAttempt: false
-  });
+  if (!effect && firstAttempt) return callRes;
+
+  return {
+    ...runAttempt, 
+    result: {
+      effect: sanitizeEffects([...prevEffects, effect]),
+      data: resultData,
+    }
+  };
 };
 
 export const triggerEntryActions = model => ({state, action}) => {

@@ -88,7 +88,7 @@ describe('triggerEntryActions', () => {
       },
       2: {
         ON_ENTRY: {
-          state: 3,
+          state: 2,
           result: {
             effect: {type: 'ON_ENTRY_EFFECT'}
           }
@@ -99,7 +99,7 @@ describe('triggerEntryActions', () => {
     expect(
       model({state : 1, action: {type: 'NEXT'}})
     ).toEqual({
-      state: 3,
+      state: 2,
       result: {
         data: 'first call res',
         effect: [{type: 'ON_ENTRY_EFFECT'}]
@@ -130,6 +130,7 @@ describe('triggerEntryActions', () => {
         ON_ENTRY: {
           state: 4,
           result: {
+            data: true,
             effect: {type: 'SECOND_EFFECT'}
           }
         }
@@ -137,10 +138,13 @@ describe('triggerEntryActions', () => {
       4: {
         ON_ENTRY: {
           state: 5,
-          result: {effect: [
-            {type: 'THIRD_EFFECT'},
-            [{type: 'FOURTH_EFFECT'}]
-          ]}
+          result: {
+            data: true,
+            effect: [
+              {type: 'THIRD_EFFECT'},
+              [{type: 'FOURTH_EFFECT'}]
+            ]
+          }
         }
       },
       5: {
@@ -154,9 +158,10 @@ describe('triggerEntryActions', () => {
                 B: {},
               },
               C: undefined
-            }
-          }
-        }
+            },
+            effect: {type: 'FIFTH_EFFECT'},
+          },
+        },
       }
     }));
 
@@ -171,6 +176,7 @@ describe('triggerEntryActions', () => {
           {type: 'SECOND_EFFECT'},
           {type: 'THIRD_EFFECT'},
           {type: 'FOURTH_EFFECT'},
+          {type: 'FIFTH_EFFECT'},
         ]
       }
     });
