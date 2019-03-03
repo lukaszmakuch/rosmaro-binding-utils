@@ -143,6 +143,20 @@ describe('triggerEntryActions', () => {
           ]}
         }
       },
+      5: {
+        ON_ENTRY: {
+          state: 5,
+          result: {
+            data: {
+              A: undefined,
+              B: {
+                A: undefined,
+                B: undefined
+              }
+            }
+          }
+        }
+      }
     }));
 
     expect(

@@ -6,7 +6,10 @@ import {
   isNil,
   set,
   lensPath,
-  isEmpty
+  isEmpty,
+  is,
+  values,
+  all
 } from 'ramda';
 
 const sanitizeEffects = effects => pipe(
@@ -15,6 +18,14 @@ const sanitizeEffects = effects => pipe(
 )([effects])
 
 const onEntryAction = {type: 'ON_ENTRY'};
+
+const resultIsEmpty = data => {
+  if (is(Object, data)) {
+    return all(resultIsEmpty, values(data));
+  } else {
+    return isNil(data);
+  }
+};
 
 const triggerUnlessNoMoreEntryActions = ({
   model, 
@@ -25,7 +36,7 @@ const triggerUnlessNoMoreEntryActions = ({
 }) => {
   const runAttempt = model({state: callRes.state, action: onEntryAction});
   const effect = runAttempt.result.effect;
-  const noReaction = !(effect || runAttempt.result.data);
+  const noReaction = resultIsEmpty(runAttempt.result);
   if (noReaction) {
     if (firstAttempt) {
       return callRes;
