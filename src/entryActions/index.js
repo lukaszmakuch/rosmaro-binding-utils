@@ -9,7 +9,8 @@ import {
   isEmpty,
   is,
   values,
-  all
+  all,
+  without,
 } from 'ramda';
 
 const sanitizeEffects = effects => pipe(
@@ -19,12 +20,9 @@ const sanitizeEffects = effects => pipe(
 
 const onEntryAction = {type: 'ON_ENTRY'};
 
-const resultIsEmpty = data => {
-  if (is(Object, data)) {
-    return all(resultIsEmpty, values(data));
-  } else {
-    return isNil(data);
-  }
+const resultIsEmpty = result => {
+  if (is(Object, result)) return all(resultIsEmpty, values(result));
+  return isNil(result);
 };
 
 const triggerUnlessNoMoreEntryActions = ({
@@ -36,7 +34,7 @@ const triggerUnlessNoMoreEntryActions = ({
 }) => {
   const runAttempt = model({state: callRes.state, action: onEntryAction});
   const effect = runAttempt.result.effect;
-  const noReaction = resultIsEmpty(runAttempt.result);
+  const noReaction = !effect && resultIsEmpty(runAttempt.result);
   if (noReaction) {
     if (firstAttempt) {
       return callRes;

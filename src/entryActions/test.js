@@ -148,11 +148,12 @@ describe('triggerEntryActions', () => {
           state: 5,
           result: {
             data: {
-              A: undefined,
+              A: {data: undefined},
               B: {
-                A: undefined,
-                B: undefined
-              }
+                A: {data: undefined},
+                B: {},
+              },
+              C: undefined
             }
           }
         }
