@@ -11,6 +11,7 @@ import {
   values,
   all,
   without,
+  dissoc
 } from 'ramda';
 
 const sanitizeEffects = effects => pipe(
@@ -21,7 +22,7 @@ const sanitizeEffects = effects => pipe(
 const onEntryAction = {type: 'ON_ENTRY'};
 
 const resultIsEmpty = result => {
-  if (is(Object, result)) return all(resultIsEmpty, values(result));
+  if (is(Object, result)) return all(resultIsEmpty, values(dissoc('effect', result)));
   return isNil(result);
 };
 

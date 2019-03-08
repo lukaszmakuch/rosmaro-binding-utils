@@ -154,7 +154,7 @@ describe('triggerEntryActions', () => {
             data: {
               A: {data: undefined},
               B: {
-                A: {data: undefined},
+                A: {data: undefined, effect: 'irrelevant'},
                 B: {},
               },
               C: undefined
