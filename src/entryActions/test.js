@@ -1,55 +1,5 @@
-import {triggerEntryActions, supportEntryActions} from './../';
+import {triggerEntryActions} from './../';
 import {lensPath, view} from 'ramda';
-
-describe('supportEntryActions', () => {
-
-  it('does nothing if it is some other action, not ON_ENTRY', () => {
-    const handlerResult = {
-      result: {
-        data: 'some result', 
-        effect: {type: 'SOME_EFFECT'}
-      },
-      arrows: [[['main:a:b', 'x']]],
-    };
-    const handler = supportEntryActions(opts => handlerResult);
-    expect(handler({action: {type: 'SOME_ACTION'}})).toEqual(handlerResult);
-  });
-
-  it('sets the resullt for ON_ENTRY, if any arrow is followed', () => {
-    const handler = supportEntryActions(opts => ({
-      result: {
-        data: undefined, 
-        effect: {type: 'SOME_EFFECT'}
-      },
-      arrows: [[['main:a:b', 'x']]],
-    }));
-    expect(handler({action: {type: 'ON_ENTRY'}})).toEqual({
-      result: {
-        data: true, 
-        effect: {type: 'SOME_EFFECT'}
-      },
-      arrows: [[['main:a:b', 'x']]],
-    });
-  });
-
-  it('does NOT set the resullt for ON_ENTRY, if no arrow is followed', () => {
-    const handler = supportEntryActions(opts => ({
-      result: {
-        data: undefined, 
-        effect: {type: 'SOME_EFFECT'}
-      },
-      arrows: [],
-    }));
-    expect(handler({action: {type: 'ON_ENTRY'}})).toEqual({
-      result: {
-        data: undefined, 
-        effect: {type: 'SOME_EFFECT'}
-      },
-      arrows: [],
-    });
-  });
-
-});
 
 describe('triggerEntryActions', () => {
 
@@ -65,7 +15,8 @@ describe('triggerEntryActions', () => {
       result: {
         data: 'first call res',
         effect: undefined
-      }
+      },
+      anyArrowFollowed: false,
     };
     const simpleModel = mockModel({
       1: {SOME_ACTION: expectedResult}
@@ -83,7 +34,8 @@ describe('triggerEntryActions', () => {
           state: 2,
           result: {
             data: 'first call res'
-          }
+          },
+          anyArrowFollowed: true,
         }
       },
       2: {
@@ -91,7 +43,16 @@ describe('triggerEntryActions', () => {
           state: 2,
           result: {
             effect: {type: 'ON_ENTRY_EFFECT'}
-          }
+          },
+          anyArrowFollowed: false,
+        },
+        RENDER: {
+          state: 2,
+          result: {
+            data: 'some data',
+            effect: [],
+          },
+          anyArrowFollowed: false,
         }
       },
     }));
@@ -103,7 +64,19 @@ describe('triggerEntryActions', () => {
       result: {
         data: 'first call res',
         effect: [{type: 'ON_ENTRY_EFFECT'}]
-      }
+      },
+      anyArrowFollowed: true,
+    });
+
+    expect(
+      model({state : 2, action: {type: 'RENDER'}})
+    ).toEqual({
+      state: 2,
+      result: {
+        data: 'some data',
+        effect: []
+      },
+      anyArrowFollowed: false,
     });
   });
 
@@ -115,36 +88,40 @@ describe('triggerEntryActions', () => {
           result: {
             data: 'first node result',
             effect: {type: 'FIRST_EFFECT'}
-          }
+          },
+          anyArrowFollowed: true
         }
       },
       2: {
         ON_ENTRY: {
           state: 3,
           result: {
-            data: true
-          }
+            data: undefined
+          },
+          anyArrowFollowed: true
         }
       },
       3: {
         ON_ENTRY: {
           state: 4,
           result: {
-            data: true,
+            data: undefined,
             effect: {type: 'SECOND_EFFECT'}
-          }
+          },
+          anyArrowFollowed: true
         }
       },
       4: {
         ON_ENTRY: {
           state: 5,
           result: {
-            data: true,
+            data: undefined,
             effect: [
               {type: 'THIRD_EFFECT'},
               [{type: 'FOURTH_EFFECT'}]
             ]
-          }
+          },
+          anyArrowFollowed: true
         }
       },
       5: {
@@ -161,6 +138,7 @@ describe('triggerEntryActions', () => {
             },
             effect: {type: 'FIFTH_EFFECT'},
           },
+          anyArrowFollowed: false
         },
       }
     }));
@@ -178,7 +156,8 @@ describe('triggerEntryActions', () => {
           {type: 'FOURTH_EFFECT'},
           {type: 'FIFTH_EFFECT'},
         ]
-      }
+      },
+      anyArrowFollowed: true,
     });
   });
 

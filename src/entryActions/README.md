@@ -1,18 +1,13 @@
 
-## supportEntryActions and triggerEntryActions
+## triggerEntryActions
 
 Enable entry actions for Rosmaro nodes.
 
 ### Installation
 
+Import:
 ```javascript
-import {supportEntryActions, triggerEntryActions} from 'rosmaro-binding-utils';
-```
-
-Wrap the handler with `supportEntryActions`:
-```javascript
-const myHandler = opts => { /* ... */ };
-const aHandlerThatSupportsEntryActions = supportEntryActions(myHandler);
+import {triggerEntryActions} from 'rosmaro-binding-utils';
 ```
 
 Wrap the model with `triggerEntryActions`:
