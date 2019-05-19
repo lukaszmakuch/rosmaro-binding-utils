@@ -11,11 +11,10 @@ import {
   partialReturns,
   targetedActions,
   callChildren,
-  supportEntryActions,
   triggerEntryActions
 } from 'rosmaro-binding-utils';
 
-const makeHandler = handlerPlan => supportEntryActions(targetedActions()(partialReturns(typeHandler({defaultHandler})(handlerPlan))));
+const makeHandler = handlerPlan => targetedActions()(partialReturns(typeHandler({defaultHandler})(handlerPlan)));
 
 // ...
 
